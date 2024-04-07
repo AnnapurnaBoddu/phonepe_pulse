@@ -134,7 +134,8 @@ def explore_data():
     if option_clm1 == 'Transaction':
 
 
-        st.write('Visualize the Transaction data based on the Transaction type')
+
+
 
         query = """
                                   SELECT DISTINCT Transaction_Type, SUM(cast(Transaction_Count as bigint)) AS Transactions
@@ -148,8 +149,15 @@ def explore_data():
         data = [list(row) for row in rows]
         df = pd.DataFrame(data, columns=['Transaction_Type', 'Transactions'])
         fig = px.pie(df, values='Transactions', names='Transaction_Type', title='Transaction Type')
-        st.plotly_chart(fig)
-        st.write('Visualize Top 10 States based on Transactions')
+        st.subheader('Visualize the Transaction data based on the Transaction type')
+        c1,c2 =st.columns(2)
+        with c1:
+
+            st.plotly_chart(fig, use_container_width=True)
+        with c2:
+
+            st.dataframe(df, use_container_width=True)
+
 
         query = """
                                           select distinct TOP 10 State, sum(Transaction_Amount) as Amount 
@@ -164,8 +172,14 @@ def explore_data():
         df = pd.DataFrame(data, columns=['State', 'Amount'])
         fig = px.bar(df, x="State", y="Amount", color=df["Amount"], labels={"State": "State"},
                          color_continuous_scale='Viridis', title='Top 10 States')
-        st.plotly_chart(fig)
-        st.write('Visualize Top 10 Districts based on Transactions')
+        st.subheader('Visualize Top 10 States based on Transactions')
+        c3,c4 = st.columns(2)
+        with c3:
+
+            st.plotly_chart(fig,use_container_width=True)
+        with c4:
+
+            st.dataframe(df,use_container_width=True)
 
         query = """
                                                 SELECT DISTINCT TOP 10 District, sum(Amount) AS Amount 
@@ -180,8 +194,16 @@ def explore_data():
         df = pd.DataFrame(data, columns=['District', 'Amount'])
         fig = px.bar(df, x="District", y="Amount", color=df["Amount"], labels={"District": "District"},
                          color_continuous_scale='Viridis', title='Top 10 Districts')
-        st.plotly_chart(fig)
-        st.write('Visualize Top 10 Pincodes based on Transactions')
+        st.subheader('Visualize Top 10 Districts based on Transactions')
+        c5,c6 = st.columns(2)
+        with c5:
+
+
+            st.plotly_chart(fig, use_container_width=True)
+        with c6:
+
+            st.dataframe(df,use_container_width=True)
+
         query = """
                                                        select distinct top 10 Pincode, sum(Amount) as Amount 
                                                        from Top_Transaction_Pincode where Year = ? and Quarter = ? 
@@ -194,7 +216,14 @@ def explore_data():
         data = [list(row) for row in rows]
         df = pd.DataFrame(data, columns=['Pincode', 'Amount'])
         fig = px.pie(df, values='Amount', names='Pincode', hole=0.5, title='Top 10 Pincodes')
-        st.plotly_chart(fig)
+        st.subheader('Visualize Top 10 Pincodes based on Transactions')
+        c7,c8 = st.columns(2)
+        with c7:
+
+            st.plotly_chart(fig, use_container_width=True)
+        with c8:
+
+            st.dataframe(df,use_container_width=True)
 
     elif option_clm1 == 'Users':
 
@@ -210,9 +239,14 @@ def explore_data():
         rows = cursor.fetchall()
         data = [list(row) for row in rows]
         df = pd.DataFrame(data, columns=['State', 'Users'])
+        st.subheader('Top 10 States based on Users')
+        c1, c2 =st.columns(2)
         fig = px.bar(df, x="State", y="Users", color=df["Users"], labels={"State": "State"},
                          color_continuous_scale='Viridis', title='Top 10 States based on Users')
-        st.plotly_chart(fig)
+        with c1:
+            st.plotly_chart(fig)
+        with c2:
+            st.dataframe(df, use_container_width=True)
         st.write('Visualize Top 10 Districts based on Users')
         query = """
                                                         SELECT DISTINCT TOP 10 District, sum(cast(Registered_User as bigint)) AS Users 
@@ -225,9 +259,14 @@ def explore_data():
         rows = cursor.fetchall()
         data = [list(row) for row in rows]
         df = pd.DataFrame(data, columns=['District', 'Users'])
+        st.subheader('Top 10 Districts based on Users')
+        c3,c4 = st.columns(2)
         fig = px.bar(df, x="District", y="Users", color=df["Users"], labels={"District": "District"},
                          color_continuous_scale='Viridis', title='Top 10 Districts based on Users')
-        st.plotly_chart(fig)
+        with c3:
+            st.plotly_chart(fig)
+        with c4:
+            st.dataframe(df,use_container_width=True)
         st.write('Visualize Top 10 Pincodes based on Users')
         query = """
                                                               select distinct top 10 Pincode, sum(cast(Registered_user as bigint)) as Users 
@@ -240,9 +279,14 @@ def explore_data():
         rows = cursor.fetchall()
         data = [list(row) for row in rows]
         df = pd.DataFrame(data, columns=['Pincode', 'Users'])
+        st.subheader('Top 10 pincodes based on users')
+        c5,c6=st.columns(2)
         fig = px.pie(df, values='Users', names='Pincode', hole=0.5,
                          title='Top 10 Pincodes based on number of users')
-        st.plotly_chart(fig)
+        with c5:
+            st.plotly_chart(fig)
+        with c6:
+            st.dataframe(df, use_container_width=True)
     else:
         pass
 
